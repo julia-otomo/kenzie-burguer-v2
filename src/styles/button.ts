@@ -1,3 +1,5 @@
+/* eslint-disable default-case */
+/* eslint-disable consistent-return */
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
