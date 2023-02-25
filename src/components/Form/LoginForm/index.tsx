@@ -1,22 +1,21 @@
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useContext } from 'react';
 import { StyledButton } from '../../../styles/button';
 import { StyledForm } from '../../../styles/form';
 import Input from '../Input';
 import { iUserLoginData } from '../../../Contexts/UserContext/interface';
-import { useContext } from 'react';
 import { UserContext } from '../../../Contexts/UserContext/UserContext';
 
 const schema = yup.object({
-  name: yup.string().required('Campo obrigatório'),
+  email: yup.string().required('Campo obrigatório'),
   password: yup.string().required('Campo obrigatório'),
 });
 
 const LoginForm = () => {
-  if (UserContext) {
-    const {userLogin} = useContext(UserContext);
-  }
+  const { userLogin } = useContext(UserContext);
+
   const {
     register,
     handleSubmit,
@@ -26,11 +25,11 @@ const LoginForm = () => {
   });
 
   const onSubmitForm = async (data: iUserLoginData) => {
-    await 
+    await userLogin(data);
   };
 
   return (
-    <StyledForm>
+    <StyledForm onSubmit={handleSubmit(onSubmitForm)}>
       <Input
         label='Email'
         type='text'

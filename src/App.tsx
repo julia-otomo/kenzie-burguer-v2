@@ -2,6 +2,8 @@
 import { ToastContainer } from 'react-toastify';
 import Router from './routes';
 import { GlobalStyles } from './styles/global';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => (
   <>

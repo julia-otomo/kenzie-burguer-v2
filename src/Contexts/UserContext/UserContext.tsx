@@ -40,6 +40,7 @@ export const UserProvider = ({ children }: iUserProviderProps) => {
     } catch (error) {
       console.log(error);
       toast.error('Email ou senha incorretos');
+      localStorage.clear();
     }
   };
   return (
