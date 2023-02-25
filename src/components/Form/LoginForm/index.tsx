@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { StyledButton } from '../../../styles/button';
 import { StyledForm } from '../../../styles/form';
 import Input from '../Input';
@@ -28,17 +28,15 @@ const LoginForm = () => {
     <StyledForm>
       <Input
         label='Nome'
-        id='name'
         type='text'
         {...register('name')}
-        errorMessage='Nome incorreto'
+        errorMessage={errors.name}
       />
       <Input
         label='Senha'
-        id='password'
         type='password'
         {...register('password')}
-        errorMessage='Senha incorreta'
+        errorMessage={errors.password}
       />
       <StyledButton type='submit' $buttonSize='default' $buttonStyle='green'>
         Entrar
