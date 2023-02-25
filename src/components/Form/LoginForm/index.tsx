@@ -4,11 +4,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { StyledButton } from '../../../styles/button';
 import { StyledForm } from '../../../styles/form';
 import Input from '../Input';
-
-interface iUserLoginData {
-  name: string;
-  password: string;
-}
+import { iUserLoginData } from '../../../Contexts/UserContext/interface';
+import { useContext } from 'react';
+import { UserContext } from '../../../Contexts/UserContext/UserContext';
 
 const schema = yup.object({
   name: yup.string().required('Campo obrigatório'),
@@ -16,6 +14,9 @@ const schema = yup.object({
 });
 
 const LoginForm = () => {
+  if (UserContext) {
+    const {userLogin} = useContext(UserContext);
+  }
   const {
     register,
     handleSubmit,
@@ -24,13 +25,17 @@ const LoginForm = () => {
     resolver: yupResolver(schema),
   });
 
+  const onSubmitForm = async (data: iUserLoginData) => {
+    await 
+  };
+
   return (
     <StyledForm>
       <Input
-        label='Nome'
+        label='Email'
         type='text'
-        {...register('name')}
-        errorMessage={errors.name}
+        {...register('email')}
+        errorMessage={errors.email}
       />
       <Input
         label='Senha'
