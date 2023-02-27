@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { SyntheticEvent, useContext } from 'react';
 import { StyledProductCard } from './style';
 import { StyledButton } from '../../../styles/button';
 import { StyledParagraph, StyledTitle } from '../../../styles/typography';
@@ -14,7 +14,7 @@ const ProductCard = ({
 }: iProductInformation) => {
   const { addToCart, productList } = useContext(CartContext);
 
-  const findProduct = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const findProduct = (event: SyntheticEvent<HTMLButtonElement>) => {
     const buttonId = Number(event.currentTarget.id);
 
     // eslint-disable-next-line eqeqeq

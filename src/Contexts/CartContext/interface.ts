@@ -5,8 +5,8 @@ export interface iCartProviderProps {
 export interface iProductInformation {
   id: number;
   name: string;
-  price: number;
-  category: string;
+  price?: number;
+  category?: string;
   img: string;
   quantity?: number;
 }
