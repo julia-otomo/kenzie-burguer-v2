@@ -6,7 +6,7 @@ import { StyledButton } from '../../../styles/button';
 import { StyledForm } from '../../../styles/form';
 import Input from '../Input';
 import { iUserRegisterData } from '../../../Contexts/UserContext/interface';
-import { UserContext } from '../../../Contexts/UserContext/UserContext';
+import { UserContext } from '../../../Contexts/UserContext';
 
 const schema = yup.object({
   name: yup.string().required('Campo obrigatório'),

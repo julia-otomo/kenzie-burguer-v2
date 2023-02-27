@@ -1,23 +1,52 @@
+import { useContext } from 'react';
 import { StyledProductCard } from './style';
 import { StyledButton } from '../../../styles/button';
 import { StyledParagraph, StyledTitle } from '../../../styles/typography';
+import { iProductInformation } from '../../../Contexts/CartContext/interface';
+import { CartContext } from '../../../Contexts/CartContext';
 
-const ProductCard = () => (
-  <StyledProductCard>
-    <div className='imageBox'>
-      <img src='https://i.imgur.com/Vng6VzV.png' alt='Hamburguer' />
-    </div>
-    <div className='content'>
-      <StyledTitle tag='h3' $fontSize='three'>
-        Hamburguer
-      </StyledTitle>
-      <StyledParagraph className='category'>Sanduíches</StyledParagraph>
-      <StyledParagraph className='price'>R$ 14,00</StyledParagraph>
-      <StyledButton $buttonSize='medium' $buttonStyle='green'>
-        Adicionar
-      </StyledButton>
-    </div>
-  </StyledProductCard>
-);
+const ProductCard = ({
+  id,
+  name,
+  category,
+  price,
+  img,
+}: iProductInformation) => {
+  const { addToCart, productList } = useContext(CartContext);
+
+  const findProduct = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const buttonId = Number(event.currentTarget.id);
+
+    // eslint-disable-next-line eqeqeq
+    const productFound = productList.find((product) => product.id == buttonId);
+
+    if (productFound) {
+      addToCart(productFound);
+    }
+  };
+
+  return (
+    <StyledProductCard>
+      <div className='imageBox'>
+        <img src={img} alt={name} />
+      </div>
+      <div className='content'>
+        <StyledTitle tag='h3' $fontSize='three'>
+          {name}
+        </StyledTitle>
+        <StyledParagraph className='category'>{category}</StyledParagraph>
+        <StyledParagraph className='price'>R${price}</StyledParagraph>
+        <StyledButton
+          $buttonSize='medium'
+          $buttonStyle='green'
+          id={String(id)}
+          onClick={(event) => findProduct(event)}
+        >
+          Adicionar
+        </StyledButton>
+      </div>
+    </StyledProductCard>
+  );
+};
 
 export default ProductCard;

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,29 @@ export const UserProvider = ({ children }: iUserProviderProps) => {
   const [user, setUser] = useState<iUserInformation | null>(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem('@TOKEN');
+    const userId = localStorage.getItem('@USERID');
+
+    if (token) {
+      const autoLoginUser = async () => {
+        try {
+          const login = await api.get(`/users/${userId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser(login.data);
+          navigate('/shop');
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      autoLoginUser();
+    }
+  }, []);
+
   const userRegister = async (data: iUserRegisterData) => {
     try {
       await api.post('/users', data);
@@ -34,7 +57,7 @@ export const UserProvider = ({ children }: iUserProviderProps) => {
       const login = await api.post('/login', data);
       setUser(login.data.user);
       localStorage.setItem('@TOKEN', login.data.accessToken);
-      localStorage.setItem('@USER', JSON.stringify(data));
+      localStorage.setItem('@USERID', JSON.stringify(login.data.user.id));
       toast.success('Login realizado com sucesso');
       navigate('/shop');
     } catch (error) {
@@ -43,8 +66,17 @@ export const UserProvider = ({ children }: iUserProviderProps) => {
       localStorage.clear();
     }
   };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('@TOKEN');
+    localStorage.removeItem('@USERID');
+    navigate('/');
+  };
   return (
-    <UserContext.Provider value={{ user, setUser, userRegister, userLogin }}>
+    <UserContext.Provider
+      value={{ user, setUser, userRegister, userLogin, logout }}
+    >
       {children}
     </UserContext.Provider>
   );

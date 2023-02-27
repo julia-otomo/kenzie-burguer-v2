@@ -8,6 +8,8 @@ export interface iUserInformation {
   id: string;
   name: string;
   email: string;
+  password?: string;
+  passwordConfirm?: string;
 }
 
 export interface iUserRegisterData {
@@ -23,4 +25,5 @@ export interface iUserContextValue {
   setUser: React.Dispatch<React.SetStateAction<iUserInformation | null>>;
   userRegister: (data: iUserRegisterData) => Promise<void>;
   userLogin: (data: iUserLoginData) => Promise<void>;
+  logout: () => void;
 }
