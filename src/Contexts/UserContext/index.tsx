@@ -9,7 +9,7 @@ import {
   iUserInformation,
   iUserRegisterData,
   iUserLoginData,
-} from './interface';
+} from './@types';
 import { api } from '../../Services/api';
 
 export const UserContext = createContext({} as iUserContextValue);

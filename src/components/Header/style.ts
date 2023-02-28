@@ -33,6 +33,27 @@ export const StyledHeader = styled.header`
           }
         }
       }
+
+      .shop-cart_container {
+        position: relative;
+
+        span {
+          position: absolute;
+          background-color: ${({ theme }) => theme.colors.primary};
+          width: 20px;
+          height: 24px;
+          border-radius: 4px;
+          text-align: center;
+          padding: 0.2rem;
+          font-weight: 700;
+          font-family: 'Inter', sans-serif;
+          font-size: 0.9rem;
+          color: ${({ theme }) => theme.colors.gray0};
+          box-sizing: border-box;
+          top: -40%;
+          left: 70%;
+        }
+      }
     }
 
     @media (max-width: 600px) {

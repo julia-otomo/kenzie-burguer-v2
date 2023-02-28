@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
 /* eslint-disable no-console */
 import { createContext, useState, useEffect } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -6,7 +8,8 @@ import {
   iCartProviderProps,
   iProductInformation,
   iCartContextValue,
-} from './interface';
+  iCartProductInformation,
+} from './@types';
 import { api } from '../../Services/api';
 
 export const CartContext = createContext({} as iCartContextValue);
@@ -14,13 +17,11 @@ export const CartContext = createContext({} as iCartContextValue);
 export const CartProvider = ({ children }: iCartProviderProps) => {
   const getCartList = localStorage.getItem('@CART');
   const [productList, setProductList] = useState<iProductInformation[]>([]);
-  const [cart, setCart] = useState<iProductInformation[]>(
+  const [cart, setCart] = useState<iCartProductInformation[]>(
     getCartList ? JSON.parse(getCartList) : []
   );
-  const [cartLength, setCartLength] = useState(0);
   const [input, setInput] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [quantity, setQuantity] = useState(0);
   const [filteredProducts, setFilteredProducts] = useState<
     iProductInformation[]
   >([]);
@@ -49,19 +50,35 @@ export const CartProvider = ({ children }: iCartProviderProps) => {
 
   useEffect(() => {
     localStorage.setItem('@CART', JSON.stringify(cart));
-    setCartLength(cart.length);
   }, [cart]);
 
-  const addToCart = (productFound: iProductInformation) => {
-    const productInCart = cart.some(
-      (product) => product.id === productFound.id
+  const editProductQuantity = (
+    callback: (currentQuantity: number) => number,
+    productFound: iCartProductInformation
+  ) => {
+    const newProducts = cart.map((product) => {
+      if (productFound.id === product.id) {
+        return { ...product, quantity: callback(productFound.quantity) };
+        // eslint-disable-next-line no-else-return
+      } else {
+        return product;
+      }
+    });
+
+    setCart(newProducts);
+  };
+
+  const addToCart = (
+    currentProduct: iProductInformation | iCartProductInformation
+  ) => {
+    const productInCart = cart.find(
+      (product) => product.id === currentProduct.id
     );
 
     if (productInCart) {
-      toast.warning('Esse produto já foi adicionado ao carrinho');
+      editProductQuantity((quantity) => quantity + 1, productInCart);
     } else {
-      const productToCart = { ...productFound };
-      productToCart.quantity = quantity;
+      const productToCart = { ...currentProduct, quantity: 1 };
       setCart([...cart, productToCart]);
       toast.success('Produto adicionado ao carrinho');
     }
@@ -77,26 +94,7 @@ export const CartProvider = ({ children }: iCartProviderProps) => {
 
   const removeAllProductsFromCart = () => {
     setCart([]);
-  };
-
-  const addMoreQuantity = (productFound: iProductInformation) => {
-    setQuantity(quantity + 1);
-    if (productFound.quantity) {
-      if (productFound.quantity > 0) {
-        // eslint-disable-next-line no-param-reassign
-        productFound.price *= productFound.quantity;
-      }
-    }
-  };
-
-  const removeQuantity = (productFound: iProductInformation) => {
-    if (productFound.quantity) {
-      if (productFound.quantity > 0) {
-        setQuantity(quantity - 1);
-        // eslint-disable-next-line no-param-reassign
-        productFound.price *= productFound.quantity;
-      }
-    }
+    toast.success('Todos os itens foram retirados do carrinho');
   };
 
   const filterProductsByInput = () => {
@@ -104,7 +102,7 @@ export const CartProvider = ({ children }: iCartProviderProps) => {
       const filterProducts = productList.filter(
         (product) =>
           product.name.toLowerCase().includes(input.toLowerCase()) ||
-          product.category.toLowerCase().includes(input.toLowerCase())
+          product.category?.toLowerCase().includes(input.toLowerCase())
       );
       setFilteredProducts(filterProducts);
     } else {
@@ -112,24 +110,39 @@ export const CartProvider = ({ children }: iCartProviderProps) => {
     }
   };
 
+  const totalCartCalc = () => {
+    const calc = cart.reduce((accumulator, currentValue) => {
+      if (currentValue.price !== undefined) {
+        return accumulator + currentValue.price;
+      }
+      return accumulator;
+    }, 0);
+    return calc;
+  };
+
+  const clearFilteredList = () => {
+    setInput('');
+    setFilteredProducts([]);
+  };
+
   return (
     <CartContext.Provider
       value={{
         productList,
         cart,
-        cartLength,
         input,
         setInput,
         showModal,
         setShowModal,
-        quantity,
         newProductsList,
         addToCart,
         removeProductFromCart,
         removeAllProductsFromCart,
-        addMoreQuantity,
-        removeQuantity,
         filterProductsByInput,
+        totalCartCalc,
+        filteredProducts,
+        setFilteredProducts,
+        clearFilteredList,
       }}
     >
       {children}

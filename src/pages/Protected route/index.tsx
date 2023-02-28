@@ -5,6 +5,5 @@ import { UserContext } from '../../Contexts/UserContext';
 export const ProtectedRoute = () => {
   const { user } = useContext(UserContext);
 
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <>{user ? <Outlet /> : <Navigate to='/' />}</>;
+  return user ? <Outlet /> : <Navigate to='/' />;
 };

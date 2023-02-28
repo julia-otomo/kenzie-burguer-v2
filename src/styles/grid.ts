@@ -9,6 +9,8 @@ export const StyledContainer = styled.div<IStyledContainerProps>`
   max-width: ${({ containerWidth }) => containerWidth || 1000}px;
   margin: 0 auto;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const StyledGridBox = styled.div`

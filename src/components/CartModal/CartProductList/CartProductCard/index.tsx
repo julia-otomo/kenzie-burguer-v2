@@ -3,9 +3,20 @@ import { SyntheticEvent, useContext } from 'react';
 import { StyledCartProductCard } from './style';
 import { StyledTitle } from '../../../../styles/typography';
 import { CartContext } from '../../../../Contexts/CartContext';
-import { iProductInformation } from '../../../../Contexts/CartContext/interface';
 
-const CartProductCard = ({ id, name, img }: iProductInformation) => {
+interface iCartProductCardProps {
+  id: number;
+  name: string;
+  img: string;
+  quantity: number;
+}
+
+const CartProductCard = ({
+  id,
+  name,
+  img,
+  quantity,
+}: iCartProductCardProps) => {
   const { removeProductFromCart, cart } = useContext(CartContext);
 
   const buttonSubmit = (event: SyntheticEvent<HTMLButtonElement>) => {
@@ -29,6 +40,7 @@ const CartProductCard = ({ id, name, img }: iProductInformation) => {
         <StyledTitle tag='h3' $fontSize='three'>
           {name}
         </StyledTitle>
+        <span>{quantity}</span>
         <button
           type='button'
           aria-label='Remover'

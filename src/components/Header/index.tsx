@@ -9,7 +9,7 @@ import { UserContext } from '../../Contexts/UserContext';
 
 const Header = () => {
   const { logout } = useContext(UserContext);
-  const { setShowModal } = useContext(CartContext);
+  const { setShowModal, cart } = useContext(CartContext);
 
   return (
     <StyledHeader>
@@ -23,14 +23,18 @@ const Header = () => {
           <nav className='nav' role='navigation'>
             <SearchForm />
             <div className='buttons'>
-              <button
-                type='button'
-                onClick={() => {
-                  setShowModal(true);
-                }}
-              >
-                <MdShoppingCart size={28} />
-              </button>
+              <div className='shop-cart_container'>
+                <span>{cart.length}</span>
+                <button
+                  type='button'
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                >
+                  <MdShoppingCart size={28} />
+                </button>
+              </div>
+
               <button type='button' onClick={logout}>
                 <MdLogout size={28} />
               </button>

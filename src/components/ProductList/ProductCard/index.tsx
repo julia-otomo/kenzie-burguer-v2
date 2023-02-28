@@ -2,16 +2,17 @@ import { SyntheticEvent, useContext } from 'react';
 import { StyledProductCard } from './style';
 import { StyledButton } from '../../../styles/button';
 import { StyledParagraph, StyledTitle } from '../../../styles/typography';
-import { iProductInformation } from '../../../Contexts/CartContext/interface';
 import { CartContext } from '../../../Contexts/CartContext';
 
-const ProductCard = ({
-  id,
-  name,
-  category,
-  price,
-  img,
-}: iProductInformation) => {
+interface iProductCardProps {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  img: string;
+}
+
+const ProductCard = ({ id, name, category, price, img }: iProductCardProps) => {
   const { addToCart, productList } = useContext(CartContext);
 
   const findProduct = (event: SyntheticEvent<HTMLButtonElement>) => {
@@ -35,7 +36,9 @@ const ProductCard = ({
           {name}
         </StyledTitle>
         <StyledParagraph className='category'>{category}</StyledParagraph>
-        <StyledParagraph className='price'>R${price}</StyledParagraph>
+        <StyledParagraph className='price'>
+          R${price?.toLocaleString('pt-BR')}
+        </StyledParagraph>
         <StyledButton
           $buttonSize='medium'
           $buttonStyle='green'

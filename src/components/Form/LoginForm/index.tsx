@@ -5,7 +5,7 @@ import { useContext } from 'react';
 import { StyledButton } from '../../../styles/button';
 import { StyledForm } from '../../../styles/form';
 import Input from '../Input';
-import { iUserLoginData } from '../../../Contexts/UserContext/interface';
+import { iUserLoginData } from '../../../Contexts/UserContext/@types';
 import { UserContext } from '../../../Contexts/UserContext';
 
 const schema = yup.object({
