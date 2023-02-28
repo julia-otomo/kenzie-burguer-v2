@@ -3,7 +3,6 @@ import { SyntheticEvent, useContext } from 'react';
 import { StyledCartProductCard } from './style';
 import { StyledTitle } from '../../../../styles/typography';
 import { CartContext } from '../../../../Contexts/CartContext';
-import { StyledButton } from '../../../../styles/button';
 
 interface iCartProductCardProps {
   id: number;
