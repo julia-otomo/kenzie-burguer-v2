@@ -25,7 +25,7 @@ export interface iCartContextValue {
   addToCart: (
     productFound: iProductInformation | iCartProductInformation
   ) => void;
-  removeProductFromCart: (productFound: iProductInformation) => void;
+  removeProductFromCart: (productFound: iCartProductInformation) => void;
   removeAllProductsFromCart: () => void;
   filterProductsByInput: () => void;
   totalCartCalc: () => number;
@@ -34,4 +34,5 @@ export interface iCartContextValue {
     React.SetStateAction<iProductInformation[]>
   >;
   clearFilteredList: () => void;
+  addQuantity: (currentProduct: iCartProductInformation) => void;
 }

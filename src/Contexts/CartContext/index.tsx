@@ -1,8 +1,5 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable consistent-return */
 /* eslint-disable no-console */
 import { createContext, useState, useEffect } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { toast } from 'react-toastify';
 import {
   iCartProviderProps,
@@ -84,12 +81,22 @@ export const CartProvider = ({ children }: iCartProviderProps) => {
     }
   };
 
-  const removeProductFromCart = (productFound: iProductInformation) => {
-    const removeProduct = cart.filter(
-      (product) => product.id !== productFound.id
+  const removeProductFromCart = (currentProduct: iCartProductInformation) => {
+    const productInCart = cart.find(
+      (product) => product.id === currentProduct.id
     );
-    setCart(removeProduct);
-    toast.success('Produto removido com sucesso');
+
+    if (productInCart) {
+      if (productInCart.quantity > 1) {
+        editProductQuantity((quantity) => quantity - 1, productInCart);
+      } else {
+        const removeProduct = cart.filter(
+          (product) => product.id !== currentProduct.id
+        );
+        setCart(removeProduct);
+        toast.success('Produto removido com sucesso');
+      }
+    }
   };
 
   const removeAllProductsFromCart = () => {
@@ -102,7 +109,7 @@ export const CartProvider = ({ children }: iCartProviderProps) => {
       const filterProducts = productList.filter(
         (product) =>
           product.name.toLowerCase().includes(input.toLowerCase()) ||
-          product.category?.toLowerCase().includes(input.toLowerCase())
+          product.category.toLowerCase().includes(input.toLowerCase())
       );
       setFilteredProducts(filterProducts);
     } else {
@@ -111,18 +118,27 @@ export const CartProvider = ({ children }: iCartProviderProps) => {
   };
 
   const totalCartCalc = () => {
-    const calc = cart.reduce((accumulator, currentValue) => {
-      if (currentValue.price !== undefined) {
-        return accumulator + currentValue.price;
-      }
-      return accumulator;
-    }, 0);
+    const newPrice = cart.map((product) => product.quantity * product.price);
+    const calc = newPrice.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
     return calc;
   };
 
   const clearFilteredList = () => {
     setInput('');
     setFilteredProducts([]);
+  };
+
+  const addQuantity = (currentProduct: iCartProductInformation) => {
+    const productInCart = cart.find(
+      (product) => product.id === currentProduct.id
+    );
+
+    if (productInCart) {
+      editProductQuantity((quantity) => quantity + 1, productInCart);
+    }
   };
 
   return (
@@ -143,6 +159,7 @@ export const CartProvider = ({ children }: iCartProviderProps) => {
         filteredProducts,
         setFilteredProducts,
         clearFilteredList,
+        addQuantity,
       }}
     >
       {children}
