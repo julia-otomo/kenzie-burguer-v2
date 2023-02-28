@@ -69,7 +69,7 @@ const RegisterForm = () => {
         label='Confirmar Senha'
         type='password'
         {...register('passwordConfirm')}
-        errorMessage={errors.name}
+        errorMessage={errors.passwordConfirm}
       />
       <StyledButton $buttonSize='default' $buttonStyle='gray'>
         Cadastrar
